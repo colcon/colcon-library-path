@@ -34,22 +34,33 @@ class LibraryPathEnvironment(EnvironmentExtensionPoint):
             ['hook_name', 'subdirectory', 'extension', 'environment_variable'])
 
         if sys.platform == 'win32':
-            library_descriptor = LibraryDescriptor(
-                'path_dll', 'bin', 'dll', 'PATH')
+            library_descriptors = [
+                LibraryDescriptor(
+                    'path_dll', 'bin', 'dll', 'PATH')
+            ]
         elif platform.system() == 'Darwin':
-            library_descriptor = LibraryDescriptor(
-                'dyld_library_path', 'lib', 'dylib', 'DYLD_LIBRARY_PATH')
+            library_descriptors = [
+                LibraryDescriptor(
+                    'dyld_library_path', 'lib', 'dylib', 'DYLD_LIBRARY_PATH')
+            ]
         else:
-            library_descriptor = LibraryDescriptor(
-                'ld_library_path', 'lib', 'so', 'LD_LIBRARY_PATH')
+            library_descriptors = [
+                LibraryDescriptor(
+                    'ld_library_path', 'lib', 'so', 'LD_LIBRARY_PATH'),
+                LibraryDescriptor(
+                    'ld_library_path', 'lib64', 'so', 'LD_LIBRARY_PATH')
+            ]
 
-        library_path = prefix_path / library_descriptor.subdirectory
-        logger.log(1, "checking '%s'" % library_path)
+        environment_hooks = []
+        for descriptor in library_descriptors:
+            library_path = prefix_path / descriptor.subdirectory
+            logger.log(1, "checking '%s'" % library_path)
 
-        if not any(library_path.glob('*.' + library_descriptor.extension)):
-            return []
-        return create_environment_hook(
-            library_descriptor.hook_name,
-            prefix_path, pkg_name,
-            library_descriptor.environment_variable,
-            library_descriptor.subdirectory, mode='prepend')
+            if any(library_path.glob('*.' + descriptor.extension)):
+                environment_hooks += create_environment_hook(
+                    descriptor.hook_name,
+                    prefix_path, pkg_name,
+                    descriptor.environment_variable,
+                    descriptor.subdirectory, mode='prepend')
+
+        return environment_hooks
