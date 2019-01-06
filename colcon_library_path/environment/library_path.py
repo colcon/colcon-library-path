@@ -52,15 +52,15 @@ class LibraryPathEnvironment(EnvironmentExtensionPoint):
             ]
 
         environment_hooks = []
-        for descriptor in library_descriptors:
-            library_path = prefix_path / descriptor.subdirectory
+        for library_descriptor in library_descriptors:
+            library_path = prefix_path / library_descriptor.subdirectory
             logger.log(1, "checking '%s'" % library_path)
 
-            if any(library_path.glob('*.' + descriptor.extension)):
+            if any(library_path.glob('*.' + library_descriptor.extension)):
                 environment_hooks += create_environment_hook(
-                    descriptor.hook_name,
+                    library_descriptor.hook_name,
                     prefix_path, pkg_name,
-                    descriptor.environment_variable,
-                    descriptor.subdirectory, mode='prepend')
+                    library_descriptor.environment_variable,
+                    library_descriptor.subdirectory, mode='prepend')
 
         return environment_hooks
