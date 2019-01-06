@@ -35,21 +35,18 @@ class LibraryPathEnvironment(EnvironmentExtensionPoint):
 
         if sys.platform == 'win32':
             library_descriptors = [
-                LibraryDescriptor(
-                    'path_dll', 'bin', 'dll', 'PATH')
+                LibraryDescriptor('path_dll', 'bin', 'dll', 'PATH')
             ]
         elif platform.system() == 'Darwin':
             library_descriptors = [
                 LibraryDescriptor(
-                    'dyld_library_path', 'lib', 'dylib', 'DYLD_LIBRARY_PATH')
-            ]
+                    'dyld_library_path', 'lib', 'dylib', 'DYLD_LIBRARY_PATH')]
         else:
             library_descriptors = [
                 LibraryDescriptor(
                     'ld_library_path', 'lib', 'so', 'LD_LIBRARY_PATH'),
                 LibraryDescriptor(
-                    'ld_library_path', 'lib64', 'so', 'LD_LIBRARY_PATH')
-            ]
+                    'ld_library_path', 'lib64', 'so', 'LD_LIBRARY_PATH')]
 
         environment_hooks = []
         for library_descriptor in library_descriptors:
