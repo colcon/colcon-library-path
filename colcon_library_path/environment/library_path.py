@@ -42,11 +42,13 @@ class LibraryPathEnvironment(EnvironmentExtensionPoint):
                 LibraryDescriptor(
                     'dyld_library_path', 'lib', 'dylib', 'DYLD_LIBRARY_PATH')]
         else:
+            library_directories = [directory.name
+                                   for directory in prefix_path.glob('lib*')]
             library_descriptors = [
                 LibraryDescriptor(
-                    'ld_library_path', 'lib', 'so', 'LD_LIBRARY_PATH'),
-                LibraryDescriptor(
-                    'ld_library_path', 'lib64', 'so', 'LD_LIBRARY_PATH')]
+                    'ld_library_path_{}'.format(subdirectory), subdirectory,
+                    'so', 'LD_LIBRARY_PATH')
+                for subdirectory in library_directories]
 
         environment_hooks = []
         for library_descriptor in library_descriptors:
