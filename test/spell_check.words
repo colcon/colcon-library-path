@@ -4,12 +4,14 @@ darwin
 dyld
 dylib
 iterdir
+linter
 linux
 namedtuple
 noqa
 pathlib
 plugin
 prepend
+pydocstyle
 pytest
 scspell
 setuptools
