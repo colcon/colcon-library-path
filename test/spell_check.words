@@ -1,9 +1,11 @@
 apache
+autouse
 colcon
 darwin
 dyld
 dylib
 iterdir
+libfoo
 linter
 linux
 namedtuple
@@ -15,4 +17,8 @@ pydocstyle
 pytest
 scspell
 setuptools
+skipif
 thomas
+tmpdir
+todo
+unittest
