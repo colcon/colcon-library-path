@@ -1,7 +1,6 @@
 # Copyright 2025 Open Source Robotics Foundation, Inc.
 # Licensed under the Apache License, Version 2.0
 
-from pathlib import Path
 import platform
 import sys
 from unittest.mock import patch
@@ -37,9 +36,9 @@ def env_hook_patch():
     pytest.param('lib/libfoo.dylib', marks=skip_unless_darwin),
     pytest.param('bin/foo.dll', marks=skip_unless_windows),
 ])
-def test_library_path(tmpdir, search_path):
+def test_library_path(tmp_path, search_path):
     extension = LibraryPathEnvironment()
-    prefix_path = Path(tmpdir)
+    prefix_path = tmp_path
     library = prefix_path / search_path
 
     # no libraries or directories
